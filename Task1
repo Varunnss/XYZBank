@@ -1,0 +1,85 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class BankAutomation {
+
+    public static void main(String[] args) {
+
+        // Initialize the WebDriver
+        WebDriverManager.ChromeDriver().setup();
+        WebDriver driver = new ChromeDriver();
+
+        // Open the bank manager login page
+        driver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
+        //Login using managerlogin
+        driver.driver.findElement(By.xpath("//button[contains(text(),'Manager')]")).click();
+        //click Add new customer button
+        driver.driver.findElement(By.xpath("//button[contains(text(),'Add')]")).click();  
+        
+        // List of customers to create
+        String[][] customersToCreate = {
+            {"Christopher", "Connely", "L789C349"},
+            {"Frank", "Christopher", "A897N450"},
+            {"Christopher", "Minka", "M098Q585"},
+            {"Connely", "Jackson", "L789C349"},
+            {"Jackson", "Frank", "L789C349"},
+            {"Minka", "Jackson", "A897N450"},
+            {"Jackson", "Connely", "L789C349"}
+        };
+
+        // Loop to create customers
+        for (String[] customer : customersToCreate) {
+            // Navigate to the create customer page
+            driver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
+
+            // Fill in the customer creation form
+            WebElement firstNameInput = driver.findElement(By.xpath("//input[@placeholder='First Name']"));
+            WebElement lastNameInput = driver.findElement(By.xpath("//input[@placeholder='Last Name']"));
+            WebElement postcodeInput = driver.findElement(By.xpath("//input[@placeholder='Post Code']"));
+            WebElement addcustomer = driver.findElement(By.xpath("//button[@type='submit']"));
+
+            firstNameInput.sendKeys(customer[0]);
+            lastNameInput.sendKeys(customer[1]);
+            postcodeInput.sendKeys(customer[2]);
+            addcustomer.click();
+        }
+
+        // Navigate to the customers tab
+        driver.findElement(By.xpath("//button[@class='btn btn-lg tab'][2]")).click();
+
+        // Verify that all customers are inserted into the table
+
+        // Customer to delete
+        String firstNameToDelete = "Christopher";
+        String lastNameToDelete = "Connely";
+        String postcodeToDelete = "L789C349";
+        
+        // Find all rows in the table
+        WebElement table = driver.findElement(By.tagName("table"));
+        java.util.List<WebElement> rows = table.findElements(By.xpath("//table[@class='table table-bordered table-striped']//tr"));
+
+// Loop through the rows to find the one you want to delete
+        for (WebElement row : rows) {
+            WebElement firstNameCell = row.findElement(By.xpath("td[1]"));
+            WebElement lastNameCell = row.findElement(By.xpath("td[2]"));
+            WebElement postcodeCell = row.findElement(By.xpath("td[3]"));
+
+            if (firstNameCell.getText().equals(firstNameToDelete) &&
+                lastNameCell.getText().equals(lastNameToDelete) &&
+                postcodeCell.getText().equals(postcodeToDelete)) {
+                // Found the row to delete, locate and click the "Delete" button
+                WebElement deleteButton = row.findElement(By.xpath("td[5]/button"));
+                deleteButton.click();
+                break; // Exit the loop after deletion
+            }
+        }
+
+        // Close the browser
+        driver.quit();
+    }
+}
