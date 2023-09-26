@@ -1,0 +1,57 @@
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class ChromeBrowserExample {
+    public static void main(String[] args) {
+      
+      //driver initializaiton
+      WebDriverManger.chromeDriver().setup();
+      Chromedriver driver = new Chromedriver();
+      
+      //cutomer login
+      driver.findElement(By.xpath("(//button[@class='btn btn-primary btn-lg'])[1]")).click();
+      
+      //dropdown selection
+      WebElement dropdown = driver.findElement(By.ID("userSelect"));
+      
+      Select select = new Select(dropdown);
+      
+      select.selectByVisibleText("Hermoine Granger");
+      
+      driver.findElement(By.xpath("//button[@class ='btn btn-default']")).click();
+
+
+      //account selection
+      
+      WebElement dropdown2 = driver.findElement(By.ID("accountSelect"));
+      
+      Select select = new Select(dropdown2);
+      
+      select.selectByVisibleText("1003");
+      
+      //Credit and debit transactions
+      
+      driver.findElement(By.xpath("//button[@ng-click ='transactions()']")).click();
+      
+      driver.findElement(By.xpath("//input[@ng-model ='amount']")).sendkeys("5000");
+      
+      driver.findElement(By.xpath("//button[text() ='Deposit']")).click();
+      
+      driver.findElement(By.xpath("//button[@ng-click ='withdrawl()']")).click();
+      
+      driver.findElement(By.xpath("//input[@ng-model ='amount']")).sendkeys("1000");
+      
+      driver.findElement(By.xpath("//button[text() ='Withdraw']")).click();
+      
+      
+      driver.quit();
+      
+      }
+      
+    }  
+      
+    
+      
+      
+      
+      
